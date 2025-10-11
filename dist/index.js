@@ -31243,6 +31243,10 @@ function requireGithub () {
 var githubExports = requireGithub();
 
 try {
+    const workspace = process.env.GITHUB_WORKSPACE;
+  coreExports.info(`工作目录: ${workspace}`);
+    const files = require$$1.readdirSync(workspace, "utf8");
+  coreExports.info(`B 仓库文件列表:\n${files.join("\n")}`);
   // `who-to-greet` input defined in action metadata file
   const nameToGreet = coreExports.getInput("who-to-greet");
   coreExports.info(`Hello ${nameToGreet}!`);

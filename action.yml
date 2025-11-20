@@ -8,8 +8,17 @@ inputs:
   upgradelink_pwd:
     description: UpgradeLink password for authentication
     required: true
+  upgradelink_type:
+    description: 升级类型: url/file/config/tauri
+    required: true
+  upgradelink_key:
+    description: 升级类型对应的唯一标识
+    required: true
   dist_url:
     description: Path to the build artifacts directory
+    required: true
+  yunma_token:
+    description: 云码token, 用来打码
     required: true
   auto_push:
     description: Whether to automatically push after upload

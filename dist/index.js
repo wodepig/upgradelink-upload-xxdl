@@ -69924,7 +69924,7 @@ async function main() {
     const password = coreExports.getInput("upgradelink_pwd", { required: true });
     const distUrl = coreExports.getInput("dist_url", { required: true });
     const autoPush = coreExports.getBooleanInput("auto_push", { required: false });
-
+	const yunmaToken = coreExports.getBooleanInput("yunma_token", { required: false });
     coreExports.info(`用户名: ${username}`);
     coreExports.info(`产物路径: ${distUrl}`);
     coreExports.info(`自动推送: ${autoPush}`);

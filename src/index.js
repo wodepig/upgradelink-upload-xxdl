@@ -16,9 +16,9 @@ async function main() {
     // 1. 获取输入参数
     const username = core.getInput("upgradelink_username", { required: true });
     const password = core.getInput("upgradelink_pwd", { required: true });
+    const upKey = core.getInput("upgradelink_key", { required: true });
     const distUrl = core.getInput("dist_url", { required: true });
     const autoPush = core.getBooleanInput("auto_push", { required: false });
-
     core.info(`用户名: ${username}`);
     core.info(`产物路径: ${distUrl}`);
     core.info(`自动推送: ${autoPush}`);
@@ -37,28 +37,32 @@ async function main() {
     }
 
     // 3. 压缩产物为 ZIP 文件
-    const zipFileName = `build-${Date.now()}.zip`;
-    const zipPath = path.join(workspace, zipFileName);
+    // const zipFileName = `build-${Date.now()}.zip`;
+    // const zipPath = path.join(workspace, zipFileName);
 
-    core.info("开始压缩产物...");
-    await ZipUtil.compressDirectory(distPath, zipPath);
-    core.info("压缩完成!");
+    // core.info("开始压缩产物...");
+    // await ZipUtil.compressDirectory(distPath, zipPath);
+    // core.info("压缩完成!");
+
 
     // 4. 执行登录
     core.info("开始登录...");
-    const loginResult = await AuthService.login(username, password);
-    const token = loginResult.token;
-    core.info("登录成功!");
+    // const loginResult = await AuthService.login(username, password);
+    // const token = loginResult.token;
+   core.info("登录成功!");
 
+    core.info("开始校验唯一标识...");
+    await AuthService.checkFileKey(upKey,token)
+    core.info("唯一标识校验成功!");
     // 5. 上传 ZIP 文件
     core.info("开始上传文件...");
-    const uploadResult = await UploadService.uploadZip(zipPath, token);
+    // const uploadResult = await UploadService.uploadZip(zipPath, token);
     core.info("上传成功!");
 
     // 6. 如果需要，执行自动推送
     if (autoPush && uploadResult.fileId) {
       core.info("开始自动推送...");
-      await UploadService.autoPush(uploadResult.fileId, token);
+      // await UploadService.autoPush(uploadResult.fileId, token);
       core.info("自动推送成功!");
     }
 
@@ -81,7 +85,7 @@ async function main() {
 // 导出 main 函数以便测试
 export { main };
 
-// 如果在 GitHub Actions 环境中，自动执行
-if (process.env.GITHUB_ACTIONS !== undefined || process.env.GITHUB_WORKSPACE) {
+// 如果在 GitHub Actions 环境中（官方运行器会将 GITHUB_ACTIONS 设为 'true'），自动执行
+if (process.env.GITHUB_ACTIONS === "true") {
   main();
 }

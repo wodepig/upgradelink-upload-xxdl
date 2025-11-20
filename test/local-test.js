@@ -81,6 +81,9 @@ if (!fs.existsSync(testDistPath)) {
 process.env.INPUT_UPGRADELINK_USERNAME = testConfig.upgradelink_username;
 process.env.INPUT_UPGRADELINK_PWD = testConfig.upgradelink_pwd;
 process.env.INPUT_DIST_URL = testConfig.dist_url;
+process.env.INPUT_YUNMA_TOKEN = testConfig.yunma_token;
+process.env.INPUT_UPGRADELINK_TYPE = testConfig.upgradelink_type;
+process.env.INPUT_UPGRADELINK_KEY = testConfig.upgradelink_key;
 process.env.INPUT_AUTO_PUSH = String(testConfig.auto_push);
 
 // 运行测试
@@ -94,7 +97,7 @@ async function runTest() {
     console.log(JSON.stringify({
       username: testConfig.upgradelink_username,
       dist_url: testConfig.dist_url,
-      auto_push: testConfig.auto_push,
+      auto_push: testConfig.auto_push
       // 不显示密码
     }, null, 2));
     console.log("\n");

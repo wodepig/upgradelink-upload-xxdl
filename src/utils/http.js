@@ -1,4 +1,7 @@
 import * as core from "@actions/core";
+import { FormData } from "formdata-node";
+import { readFileSync } from "fs";
+import { basename } from "path";
 
 /**
  * HTTP 请求工具类
@@ -80,10 +83,6 @@ export class HttpClient {
     try {
       core.info(`上传文件到: ${url}`);
       core.info(`文件路径: ${filePath}`);
-
-      const { FormData } = await import("formdata-node");
-      const { readFileSync } = await import("fs");
-      const { basename } = await import("path");
 
       const formData = new FormData();
       const fileBuffer = readFileSync(filePath);

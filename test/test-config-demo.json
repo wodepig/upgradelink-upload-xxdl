@@ -1,0 +1,10 @@
+{
+  "upgradelink_username": "用户名",
+  "upgradelink_pwd": "密码",
+  "dist_url": "./test/fixtures/dist",
+  "auto_push": true,
+  "upgradelink_login_url": "https://api.upgradelink.com/auth/login",
+  "upgradelink_upload_url": "https://api.upgradelink.com/upload",
+  "upgradelink_push_url": "https://api.upgradelink.com/push"
+}
+

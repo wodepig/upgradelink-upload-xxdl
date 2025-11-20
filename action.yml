@@ -1,15 +1,26 @@
-name: Hello World
-description: Greet someone and record the time
+name: UpgradeLink Upload
+description: Upload build artifacts to UpgradeLink platform
 
 inputs:
-  who-to-greet: # id of input
-    description: Who to greet
+  upgradelink_username:
+    description: UpgradeLink username for authentication
     required: true
-    default: World
+  upgradelink_pwd:
+    description: UpgradeLink password for authentication
+    required: true
+  dist_url:
+    description: Path to the build artifacts directory
+    required: true
+  auto_push:
+    description: Whether to automatically push after upload
+    required: false
+    default: 'false'
 
 outputs:
-  time: # id of output
-    description: The time we greeted you
+  success:
+    description: Whether the upload was successful
+  upload_url:
+    description: The URL of the uploaded file
 
 runs:
   using: node20

@@ -65063,68 +65063,47 @@ var archiver = /*@__PURE__*/getDefaultExportFromCjs(archiverExports);
 class ZipUtil {
   /**
    * 将目录压缩成 ZIP 文件
-   * @param {string} sourceDir - 源目录路径
-   * @param {string} outputPath - 输出 ZIP 文件路径
-   * @returns {Promise<string>} 返回 ZIP 文件路径
+   * @param sourceDir 要压缩的源目录
+   * @param outputPath 输出 zip 文件路径
+   * @returns 输出文件路径
    */
-  static async compressDirectory(sourceDir, outputPath) {
+  static async compressDirectory(sourceDir, outputPath){
     return new Promise((resolve, reject) => {
-      try {
-        coreExports.info(`开始压缩目录: ${sourceDir}`);
-        coreExports.info(`输出路径: ${outputPath}`);
-
-        // 检查源目录是否存在
-        if (!fs.existsSync(sourceDir)) {
-          throw new Error(`源目录不存在: ${sourceDir}`);
-        }
-
-        // 确保输出目录存在
-        const outputDir = require$$1.dirname(outputPath);
-        if (!fs.existsSync(outputDir)) {
-          fs.mkdirSync(outputDir, { recursive: true });
-        }
-
-        // 创建文件输出流
-        const output = fs.createWriteStream(outputPath);
-        const archive = archiver("zip", {
-          zlib: { level: 9 }, // 最高压缩级别
-        });
-
-        // 监听所有归档数据都写入完成
-        output.on("close", () => {
-          const sizeInMB = (archive.pointer() / 1024 / 1024).toFixed(2);
-          coreExports.info(`压缩完成! 文件大小: ${sizeInMB} MB`);
-          coreExports.info(`ZIP 文件路径: ${outputPath}`);
-          resolve(outputPath);
-        });
-
-        // 监听警告（例如 stat 失败等）
-        archive.on("warning", (err) => {
-          if (err.code === "ENOENT") {
-            coreExports.warning(`压缩警告: ${err.message}`);
-          } else {
-            reject(err);
-          }
-        });
-
-        // 监听错误
-        archive.on("error", (err) => {
-          coreExports.error(`压缩错误: ${err.message}`);
-          reject(err);
-        });
-
-        // 将归档对象连接到文件流
-        archive.pipe(output);
-
-        // 添加整个目录到归档中
-        archive.directory(sourceDir, false);
-
-        // 完成归档（即我们完成了追加文件，但流必须完成）
-        archive.finalize();
-      } catch (error) {
-        coreExports.error(`压缩失败: ${error.message}`);
-        reject(error);
+      // 检查目录
+      if (!fs.existsSync(sourceDir)) {
+        return reject(new Error(`源目录不存在: ${sourceDir}`));
       }
+
+      // 确保输出目录存在
+      const outputDir = require$$1.dirname(outputPath);
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+
+      const output = fs.createWriteStream(outputPath);
+
+      const archive = archiver("zip", {
+        zlib: { level: 9 }
+      });
+
+      // 监听写入完成（CI 环境必须监听 finish）
+      output.on("close", () => resolve(outputPath));
+      output.on("finish", () => resolve(outputPath));
+
+      // 错误处理
+      archive.on("error", err => reject(err));
+
+      // 绑定到文件流
+      archive.pipe(output);
+
+      // 关键：确保包含所有文件（含隐藏文件）
+      archive.glob("**/*", {
+        cwd: sourceDir,
+        dot: true, // 包含隐藏文件
+        follow: true // 跟随软链接
+      });
+
+      archive.finalize();
     });
   }
 
@@ -66183,7 +66162,6 @@ async function main() {
     coreExports.info("开始压缩产物...");
     await ZipUtil.compressDirectory(distPath, zipPath);
     coreExports.info("压缩完成!");
-
 
     // 4. 执行登录
     coreExports.info("开始登录...");

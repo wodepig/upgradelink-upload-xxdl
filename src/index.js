@@ -43,7 +43,6 @@ async function main() {
     await ZipUtil.compressDirectory(distPath, zipPath);
     core.info("压缩完成!");
 
-
     // 4. 执行登录
     core.info("开始登录...");
     await UlService.autoLogin(username, password);

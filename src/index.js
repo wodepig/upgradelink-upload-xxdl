@@ -1,10 +1,8 @@
 import * as core from "@actions/core";
-import * as github from "@actions/github";
 import * as path from "path";
 import * as fs from "fs";
 import { ZipUtil } from "./utils/zip.js";
-import { AuthService } from "./services/auth.js";
-import { UploadService } from "./services/upload.js";
+import { UlService } from "./services/upgrade-link.js";
 
 /**
  * 主函数：执行完整的上传流程
@@ -22,7 +20,6 @@ async function main() {
     core.info(`用户名: ${username}`);
     core.info(`产物路径: ${distUrl}`);
     core.info(`自动推送: ${autoPush}`);
-
     // 2. 解析产物路径（支持相对路径和绝对路径）
     const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
     const distPath = path.isAbsolute(distUrl)
@@ -37,45 +34,45 @@ async function main() {
     }
 
     // 3. 压缩产物为 ZIP 文件
-    // const zipFileName = `build-${Date.now()}.zip`;
-    // const zipPath = path.join(workspace, zipFileName);
-
-    // core.info("开始压缩产物...");
-    // await ZipUtil.compressDirectory(distPath, zipPath);
-    // core.info("压缩完成!");
+    const zipFileName = `dist-${Date.now()}.zip`;
+    const zipPath = path.join(workspace, zipFileName);
+    // const zipPath =  path.join(workspace, 'dist.zip');
+    core.info("开始压缩产物...");
+    await ZipUtil.compressDirectory(distPath, zipPath);
+    core.info("压缩完成!");
 
 
     // 4. 执行登录
     core.info("开始登录...");
-    // const loginResult = await AuthService.login(username, password);
-    // const token = loginResult.token;
-   core.info("登录成功!");
+    await UlService.autoLogin(username, password);
+    core.info("登录成功!");
 
     core.info("开始校验唯一标识...");
-    await AuthService.checkFileKey(upKey,token)
+    await UlService.checkTypeKey(upKey)
     core.info("唯一标识校验成功!");
     // 5. 上传 ZIP 文件
     core.info("开始上传文件...");
-    // const uploadResult = await UploadService.uploadZip(zipPath, token);
+    await UlService.uploadZip(zipPath);
     core.info("上传成功!");
 
-    // 6. 如果需要，执行自动推送
-    if (autoPush && uploadResult.fileId) {
-      core.info("开始自动推送...");
-      // await UploadService.autoPush(uploadResult.fileId, token);
-      core.info("自动推送成功!");
+    // 创建应用版本
+    core.info("开始创建应用版本...");
+    await UlService.createVersion()
+    core.info("创建应用版本成功...");
+
+    if (autoPush) {
+      // 创建升级任务
+      core.info("开始创建升级任务...");
+      await UlService.createUpdateTask()
+      core.info("创建升级任务成功...");
     }
 
     // 7. 清理临时 ZIP 文件
-    ZipUtil.cleanup(zipPath);
+    // ZipUtil.cleanup(zipPath);
 
     // 8. 设置输出
     core.setOutput("success", "true");
-    if (uploadResult.uploadUrl) {
-      core.setOutput("upload_url", uploadResult.uploadUrl);
-    }
-
-    core.info("=== 上传流程完成 ===");
+    core.info("=== UpgradeLink自动升级任务完成 ===");
   } catch (error) {
     core.setFailed(`上传流程失败: ${error.message}`);
     throw error;

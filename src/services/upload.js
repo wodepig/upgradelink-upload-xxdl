@@ -18,9 +18,7 @@ export class UploadService {
       core.info(`开始上传文件: ${zipPath}`);
 
       // TODO: 替换为实际上传 API 地址
-      const uploadUrl =
-        process.env.UPGRADELINK_UPLOAD_URL ||
-        "https://api.upgradelink.com/upload";
+      const uploadUrl = "http://backend.upgrade.toolsetlink.com/fms-api/cloud_file/upload"
 
       const authHeaders = {
         Authorization: `Bearer ${token}`,
@@ -39,15 +37,16 @@ export class UploadService {
         additionalFields,
         authHeaders
       );
-
-      // TODO: 根据实际 API 响应格式调整
-      // 假设响应格式为: { url: "...", fileId: "..." }
-      if (response.url || response.fileId) {
+      if(response.code !== 0){
+        throw new Error("上传文件失败:" + response.msg);
+      }
+      
+      if (response.data && response.data.url) {
         core.info("上传成功!");
         return {
           success: true,
-          uploadUrl: response.url,
-          fileId: response.fileId,
+          uploadUrl: response.data.url,
+          cloudFileId: response.data.id,
           ...response,
         };
       } else {

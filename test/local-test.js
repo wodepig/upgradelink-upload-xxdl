@@ -85,6 +85,7 @@ process.env.INPUT_YUNMA_TOKEN = testConfig.yunma_token;
 process.env.INPUT_UPGRADELINK_TYPE = testConfig.upgradelink_type;
 process.env.INPUT_UPGRADELINK_KEY = testConfig.upgradelink_key;
 process.env.INPUT_AUTO_PUSH = String(testConfig.auto_push);
+process.env.INPUT_PROMPT_UPGRADE_CONTENT = String(testConfig.prompt_upgrade_content);
 
 // 运行测试
 async function runTest() {
@@ -97,7 +98,8 @@ async function runTest() {
     console.log(JSON.stringify({
       username: testConfig.upgradelink_username,
       dist_url: testConfig.dist_url,
-      auto_push: testConfig.auto_push
+      auto_push: testConfig.auto_push,
+      prompt_upgrade_content: testConfig.prompt_upgrade_content,
       // 不显示密码
     }, null, 2));
     console.log("\n");

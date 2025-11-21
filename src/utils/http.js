@@ -85,16 +85,13 @@ export class HttpClient {
       core.info(`文件路径: ${filePath}`);
 
       const formData = new FormData();
-      const fileBuffer = readFileSync(filePath);
+      const fileBuffer = new Blob([readFileSync(filePath)]);
       const fileName = basename(filePath);
-
       formData.append("file", fileBuffer, fileName);
-
       // 添加额外的表单字段
       Object.keys(additionalFields).forEach((key) => {
         formData.append(key, additionalFields[key]);
       });
-
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -103,7 +100,6 @@ export class HttpClient {
         },
         body: formData,
       });
-
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(

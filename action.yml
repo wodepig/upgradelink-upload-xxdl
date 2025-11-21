@@ -9,7 +9,7 @@ inputs:
     description: UpgradeLink password for authentication
     required: true
   upgradelink_type:
-    description: 升级类型: url/file/config/tauri
+    description: 升级类型,可以是url/file/config/tauri
     required: true
   upgradelink_key:
     description: 升级类型对应的唯一标识
@@ -17,7 +17,7 @@ inputs:
   prompt_upgrade_content:
     description: 升级的提示内容
     required: true
-    default: 444
+    default: '默认升级'
   dist_url:
     description: Path to the build artifacts directory
     required: true

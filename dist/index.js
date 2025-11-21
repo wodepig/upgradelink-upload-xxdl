@@ -65832,7 +65832,6 @@ class UlService {
         await this.login(username, password);
       } catch (error) {
         coreExports.error(`第${i + 1}次自动登录失败: ${error.message}`);
-        throw new Error(`第${i + 1}次自动登录失败: ${error.message}`);
       }
       if (this.token) {
         return
@@ -66154,9 +66153,11 @@ async function main() {
     const upKey = coreExports.getInput("upgradelink_key", { required: true });
     const distUrl = coreExports.getInput("dist_url", { required: true });
     const autoPush = coreExports.getBooleanInput("auto_push", { required: false });
+    const promptUpgradeContent = coreExports.getInput("prompt_upgrade_content", { required: true });
     coreExports.info(`用户名: ${username}`);
     coreExports.info(`产物路径: ${distUrl}`);
     coreExports.info(`自动推送: ${autoPush}`);
+    coreExports.info(`更新内容: ${promptUpgradeContent}`);
     // 2. 解析产物路径（支持相对路径和绝对路径）
     const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
     const distPath = require$$1.isAbsolute(distUrl)

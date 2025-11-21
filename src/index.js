@@ -17,9 +17,11 @@ async function main() {
     const upKey = core.getInput("upgradelink_key", { required: true });
     const distUrl = core.getInput("dist_url", { required: true });
     const autoPush = core.getBooleanInput("auto_push", { required: false });
+    const promptUpgradeContent = core.getInput("prompt_upgrade_content", { required: true });
     core.info(`用户名: ${username}`);
     core.info(`产物路径: ${distUrl}`);
     core.info(`自动推送: ${autoPush}`);
+    core.info(`更新内容: ${promptUpgradeContent}`);
     // 2. 解析产物路径（支持相对路径和绝对路径）
     const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
     const distPath = path.isAbsolute(distUrl)

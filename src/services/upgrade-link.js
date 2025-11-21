@@ -38,7 +38,6 @@ export class UlService {
         await this.login(username, password);
       } catch (error) {
         core.error(`第${i + 1}次自动登录失败: ${error.message}`);
-        throw new Error(`第${i + 1}次自动登录失败: ${error.message}`);
       }
       if (this.token) {
         return

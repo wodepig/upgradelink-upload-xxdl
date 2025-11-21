@@ -1,10 +1,11 @@
 {
   "upgradelink_username": "用户名",
   "upgradelink_pwd": "密码",
-  "dist_url": "./test/fixtures/dist",
+  "upgradelink_type": "类型. 如file/url/tauri",
+  "upgradelink_key": "type对应的唯一key",
+  "prompt_upgrade_content": "升级内容",
+  "dist_url": ".output",
   "auto_push": true,
-  "upgradelink_login_url": "https://api.upgradelink.com/auth/login",
-  "upgradelink_upload_url": "https://api.upgradelink.com/upload",
-  "upgradelink_push_url": "https://api.upgradelink.com/push"
+  "yunma_token":"对验证码打码. https://console.jfbym.com/register/TG95218"
 }
 

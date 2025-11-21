@@ -65964,6 +65964,8 @@ class UlService {
       }
       if (getVersionListResp.data.total === 0) {
         this.nextVersionCode = 1;
+        coreExports.info('当前应用版本为空, 下一个版本号为: 1');
+        return []
       }
       const items = getVersionListResp.data.data;
       this.appVersion = items[0];
@@ -65980,6 +65982,9 @@ class UlService {
    * @returns 
    */
   static async getVersionCode(items) {
+    if (items.length === 0) {
+      return
+    }
     try {
       // 1. 按 versionCode 升序排序（核心排序逻辑）
       const sortedList = [...items].sort((a, b) => a.versionCode - b.versionCode);

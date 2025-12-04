@@ -6,6 +6,5 @@
   "prompt_upgrade_content": "升级内容",
   "dist_url": ".output",
   "auto_push": true,
-  "yunma_token":"对验证码打码. https://console.jfbym.com/register/TG95218"
+  "yunma_token":"云码token"
 }
-

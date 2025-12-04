@@ -4,7 +4,7 @@
 此Action用于将指定目录下的文件压缩成zip, 然后上传到[UpgradeLink](http://upgrade.toolsetlink.com/). 可以实现自动升级的功能.
 
 使用视频: 
-[todo]()
+[B站](https://www.bilibili.com/video/BV1uj2aBREeL/)
 
 **注意**
 Action运行时需要使用UpgradeLink的账号密码, 介意的请不要使用.

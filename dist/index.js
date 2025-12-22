@@ -65838,7 +65838,7 @@ class UlService {
       const yunmaScan = await HttpClient.post('http://api.jfbym.com/api/YmServer/customApi', {
         image: getCaptcha.data.imgPath,
         token: yunmaToken,
-        type: 10110
+        type: 10111
       });
       coreExports.info(`验证码: ${JSON.stringify(yunmaScan)}`);
       if (yunmaScan.code !== 10000) {
@@ -66030,9 +66030,10 @@ class UlService {
    */
   static async createVersion() {
     try {
+        const promptUpgradeContent = coreExports.getInput("prompt_upgrade_content", { required: true });
       let body = {
         cloudFileId: this.fileInfo.id,
-        description: 'auto by github actions',
+        description: promptUpgradeContent || 'auto by github actions',
         fileId: this.appInfo.id,
         versionCode: this.nextVersionCode,
         versionName: this.nextVersionCode + ''

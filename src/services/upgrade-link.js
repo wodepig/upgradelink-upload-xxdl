@@ -56,7 +56,7 @@ export class UlService {
   static async login(username, password) {
     try {
       const yunmaToken = core.getInput("yunma_token", { required: true });
-      const getCaptcha = await HttpClient.get('http://backend.upgrade.toolsetlink.com/sys-api/captcha')
+      const getCaptcha = await HttpClient.get('http://backend.upgrade.toolsetlink.com/api/captcha')
       if (getCaptcha.code !== 0) {
         throw new Error("获取验证码失败");
       }
@@ -75,7 +75,7 @@ export class UlService {
       // console.log('yunmaScan',yunmaScan);
 
       core.info(`开始登录，用户名: ${username}`);
-      const startLogin = await HttpClient.post('http://backend.upgrade.toolsetlink.com/sys-api/user/login',
+      const startLogin = await HttpClient.post('http://backend.upgrade.toolsetlink.com/api/user/login',
         {
           "password": password,
           "username": username,
@@ -121,10 +121,10 @@ export class UlService {
           break
         }
         case 'file': {
-          listUrl = 'http://backend.upgrade.toolsetlink.com/upgrade/upgrade_file/list'
-          this.extUrl.versionListUrl = 'http://backend.upgrade.toolsetlink.com/upgrade/upgrade_file_version/list'
-          this.extUrl.createVersionUrl = 'http://backend.upgrade.toolsetlink.com/upgrade/upgrade_file_version/create'
-          this.extUrl.createUpdateUrl = 'http://backend.upgrade.toolsetlink.com/upgrade/upgrade_file_upgrade_strategy/create'
+          listUrl = 'https://backend.upgrade.toolsetlink.com/api/upgrade_file/list'
+          this.extUrl.versionListUrl = 'https://backend.upgrade.toolsetlink.com/api/upgrade_file_version/list'
+          this.extUrl.createVersionUrl = 'https://backend.upgrade.toolsetlink.com/api/upgrade_file_version/create'
+          this.extUrl.createUpdateUrl = 'https://backend.upgrade.toolsetlink.com/api/upgrade_file_upgrade_strategy/create'
           break
         }
       }
@@ -219,7 +219,7 @@ export class UlService {
       core.info(`开始上传文件: ${zipPath}`);
 
       // TODO: 替换为实际上传 API 地址
-      const uploadUrl = "http://backend.upgrade.toolsetlink.com/fms-api/cloud_file/upload"
+      const uploadUrl = "https://backend.upgrade.toolsetlink.com/api/cloud_file/upload"
 
       const authHeaders = this.getAuthHeaders();
 
